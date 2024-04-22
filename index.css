@@ -1,0 +1,91 @@
+title {   /*标题的样式 */
+        font-family:"楷体";
+}
+body {           /*关于背景图片的布置*/
+    background-image: url("../cat_necho.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.center {    /*将某个标签放到行中间*/
+    text-align: center;
+}
+.white_center{  /*控制最大的标题的样式，放到中间，和字体与尺寸*/
+    text-align: center;
+    color: rgb(134, 124, 124);
+    font-family: "Helvetica";
+    font-size: 90px;
+    margin-top: 10%;
+}
+.input_container {  /*控制输入框盒子的样式*/
+    display: flex;
+    justify-content: center;
+    border-radius: 25px;
+    border: 2px solid white;
+    width: 50%;
+    height: 60px;
+    margin: 0 auto;
+    margin-left: auto;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 2px 5px 6px 1px rgba(0, 0, 0, 0.2);
+}
+.input_size {    /*控制输入框的样式*/
+    width: 90%;
+    height: 90%;
+    border-radius: 25px;
+    border: 2px solid white;
+    font-size: 20px;
+    font-family: "三极露融体";
+    padding-left: 2ch;
+    justify-content: center;
+}
+.input_size::placeholder { /*控制输入框的提示文字的样式*/
+    font-size: 20px;
+    font-family: "三极露融体";
+    font-style: italic;
+}
+.input_size:focus {  /*控制输入框的聚焦样式*/
+    outline: none;
+    border-color: rgb(157, 173, 173) !important;
+}
+.send_button { /*控制发送按钮的样式*/
+    width: 10%;
+    height: 100%;
+    background-color: rgb(60, 175, 166);
+    border-radius: 25px;
+    border: none;
+    font-size: 20px;
+}
+.send_button:hover {  /*控制鼠标悬停在发送按钮上的样式*/
+    background-color: #79b7c7;
+}
+.send_button:active { /*控制鼠标点击发送按钮的样式*/
+    background-color: rgb(60, 175, 166);
+}
+
+.disperse {
+animation: disperse 1s forwards;
+}
+
+/* 控制返回内容的样式 */
+.reword{
+    display: block;
+    max-height: 60vh; 
+    width: 50%;
+    background-color: #79b7c7;
+    margin: auto;
+    border-radius: 15px;
+    margin-top: 40px;
+    padding: 5px;
+    overflow: auto;
+}
+.reword div{
+    width: 100%;
+    min-height: 60px;
+    background-color: white;
+    line-height: 60px;
+    font-size: 20px;
+    border: 2px solid rgb(31, 81, 122);
+    border-radius: 15px;
+    padding: 4px;
+    line-height: 1.5;
+}
