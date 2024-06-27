@@ -1,19 +1,117 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ChatGPT</title>
-    <link rel="stylesheet" href="./CSS/index.css">
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <title>ChatGPT Streaming Demo (Frontend Only, Axios)</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
-    <h1 class="white_center type_word_first">ChatGPT</h1>
-    <div class="input_container" id="inputContainer">  
-        <input class="input_size" id= 'inputField' type="text" placeholder="请输入文本"> 
-        <button class="send_button" id="sendButton">发送</button>
-    </div>
-    <div class="reword">
-        
-    </div>
-    <script src="./JS/index.js"></script>
+  <div>
+    <input class="input_user">
+  </div>
+  <div id="chatbox"></div>
+  <script>
+//正则匹配markdown字符
+console.log(111);
+    // import { marked } from 'marked';
+    function containsMarkdown(text) {
+    // 定义一些简单的 Markdown 特征模式
+    const patterns = [
+      /^#+\s/, // 标题
+      /\[.*?\]\(.*?\)/, // 链接
+      /\*\*.*?\*\*/g, // 加粗
+      /__.*?__/g, // 加粗
+      /\*.*?\*/g, // 斜体
+      /_.*?_/g, // 斜体
+      /```[\s\S]*?```/, // 代码块
+      /`.*?`/, // 行内代码
+      /^- /, // 无序列表
+      /^\* /, // 无序列表
+      /^\d+\. / // 有序列表
+    ];
+
+    // 检查文本是否匹配任何 Markdown 特征模式
+    return patterns.some(pattern => pattern.test(text));
+  }
+
+    const apiKey = 'your-api-key-here';
+    const chatbox = document.getElementById('chatbox');
+    const input = document.querySelector('.input_user').value;
+    document.querySelector('.input_user').addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+        // 确保在调用函数之前获取最新的输入值
+        console.log('等待输出');
+        const input = document.querySelector('.input_user').value;
+        getChatGPTResponse(input); // 假设你的函数现在接受输入作为参数
+      }
+    });
+
+    async function getChatGPTResponse(input) {
+  try {
+    const response = await fetch('url代理网址', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: [{ role: 'user', 'content': 'python代码输出111' }],
+        max_tokens: 1500,
+        temperature: 1,
+        stream: true
+      }),
+    });
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+
+      const chunk = decoder.decode(value);
+      const lines = chunk.split('\n\n');
+
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          if (line === 'data: [DONE]') break;
+          const data = JSON.parse(line.substring(6));
+          if (data.choices && data.choices[0].delta && data.choices[0].delta.content) {
+            // 如果响应包含 Markdown，则将其转换为 HTML
+            // if (containsMarkdown(data.choices[0].delta.content)) {
+            //   chatbox.innerHTML += marked(data.choices[0].delta.content);
+            // } else {
+            chatbox.innerHTML += ('2' +data.choices[0].delta.content + '1');
+          // }
+        }
+      }
+    }
+  }
+  } catch (error) {
+    console.error('Error fetching response:', error);
+    chatbox.innerHTML = 'An error occurred while fetching the response.';
+  }
+}
+
+// 示例调用
+// getChatGPTResponse();
+
+  </script>
+  <style>
+    .input_user {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+    }
+    #chatbox {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      height: 300px;
+      overflow-y: scroll;
+    }
+  </style>
 </body>
 </html>
